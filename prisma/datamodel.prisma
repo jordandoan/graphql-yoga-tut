@@ -4,7 +4,7 @@ type Link {
   description: String!
   url: String!
   postedBy: User
-  votes: [Vote!]!
+  votes: [Vote!]! @relation(name: "LinkOnVote", onDelete: CASCADE)
 }
 
 type User {
@@ -13,11 +13,11 @@ type User {
   email: String! @unique
   password: String!
   links: [Link!]!
-  votes: [Vote!]!
+  votes: [Vote!]! @relation(name: "PersonOnVote", onDelete: CASCADE)
 }
 
 type Vote {
   id: ID! @id
-  link: Link!
-  user: User!
+  link: Link! @relation(name: "LinkOnVote", onDelete: SET_NULL)
+  user: User! @relation(name: "PersonOnVote", onDelete: SET_NULL)
 }
