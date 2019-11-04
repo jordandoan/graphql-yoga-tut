@@ -58,9 +58,37 @@ async function vote(parent, args, context, info) {
     link: { connect: { id: args.linkId } },
   })
 }
+
+async function updateLink(parent, args, context, info) {
+  const userId = getUserId(context)
+  const {id, description, url} = args;
+  return await context.prisma.updateLink({
+    data: {
+      description,
+      url,
+    },
+    where: {
+      id,
+    },
+  })
+  
+}
+
+async function deleteLink(parent, args, context, info) {
+  const userId = getUserId(context)
+  return context.prisma.deleteLink(
+    {
+      id: args.id
+    },
+     info
+  );
+}
+
 module.exports = {
   signup,
   login,
   post,
   vote,
+  updateLink,
+  deleteLink,
 }
