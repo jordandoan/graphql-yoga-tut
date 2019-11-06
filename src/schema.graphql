@@ -26,6 +26,7 @@ type Link {
   url: String!
   postedBy: User
   votes: [Vote!]!
+  count: Int!
 }
 
 type AuthPayload {

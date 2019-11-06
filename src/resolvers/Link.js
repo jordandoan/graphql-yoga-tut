@@ -6,7 +6,12 @@ function votes(parent, args, context) {
   return context.prisma.link({ id: parent.id }).votes()
 }
 
+async function count(parent, args, context) {
+  return await context.prisma.votesConnection({where: {link: {id:parent.id}}}).aggregate().count();
+}
+
 module.exports = {
     postedBy,
     votes,
+    count
 }
