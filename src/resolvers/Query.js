@@ -26,6 +26,10 @@ async function feed(parent, args, context, info) {
     }
 }
 
+async function link(parent, args, context, info) {
+  return await context.prisma.link({id: args.id})
+}
+
 async function me(parent, args, context, info) {
   const id = getUserId(context);
   return await context.prisma.user({id})
@@ -33,5 +37,6 @@ async function me(parent, args, context, info) {
 
 module.exports = {
   feed,
+  link,
   me,
 }
