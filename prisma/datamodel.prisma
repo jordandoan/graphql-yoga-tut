@@ -5,6 +5,7 @@ type Link {
   url: String!
   postedBy: User
   votes: [Vote!]! @relation(name: "LinkOnVote", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentOnVote", onDelete: CASCADE)
 }
 
 type User {
@@ -20,4 +21,13 @@ type Vote {
   id: ID! @id
   link: Link! @relation(name: "LinkOnVote", onDelete: SET_NULL)
   user: User! @relation(name: "PersonOnVote", onDelete: SET_NULL)
+}
+
+type Comment {
+  id: ID! @id
+  link: Link! @relation(name: "CommentOnVote", onDelete: SET_NULL)
+  user: User!
+  reply_to: Comment @relation(name: "CommentOnComment", onDelete: SET_NULL)
+  text: String!
+  replies: [Comment!]! @relation(name: "CommentOnComment", onDelete: CASCADE)
 }

@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateLink {
+/* GraphQL */ `type AggregateComment {
+  count: Int!
+}
+
+type AggregateLink {
   count: Int!
 }
 
@@ -19,6 +23,284 @@ type BatchPayload {
   count: Long!
 }
 
+type Comment {
+  id: ID!
+  link: Link!
+  user: User!
+  reply_to: Comment
+  text: String!
+  replies(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
+}
+
+type CommentConnection {
+  pageInfo: PageInfo!
+  edges: [CommentEdge]!
+  aggregate: AggregateComment!
+}
+
+input CommentCreateInput {
+  id: ID
+  link: LinkCreateOneWithoutCommentsInput!
+  user: UserCreateOneInput!
+  reply_to: CommentCreateOneWithoutRepliesInput
+  text: String!
+  replies: CommentCreateManyWithoutReply_toInput
+}
+
+input CommentCreateManyWithoutLinkInput {
+  create: [CommentCreateWithoutLinkInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateManyWithoutReply_toInput {
+  create: [CommentCreateWithoutReply_toInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateOneWithoutRepliesInput {
+  create: CommentCreateWithoutRepliesInput
+  connect: CommentWhereUniqueInput
+}
+
+input CommentCreateWithoutLinkInput {
+  id: ID
+  user: UserCreateOneInput!
+  reply_to: CommentCreateOneWithoutRepliesInput
+  text: String!
+  replies: CommentCreateManyWithoutReply_toInput
+}
+
+input CommentCreateWithoutRepliesInput {
+  id: ID
+  link: LinkCreateOneWithoutCommentsInput!
+  user: UserCreateOneInput!
+  reply_to: CommentCreateOneWithoutRepliesInput
+  text: String!
+}
+
+input CommentCreateWithoutReply_toInput {
+  id: ID
+  link: LinkCreateOneWithoutCommentsInput!
+  user: UserCreateOneInput!
+  text: String!
+  replies: CommentCreateManyWithoutReply_toInput
+}
+
+type CommentEdge {
+  node: Comment!
+  cursor: String!
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+}
+
+type CommentPreviousValues {
+  id: ID!
+  text: String!
+}
+
+input CommentScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  AND: [CommentScalarWhereInput!]
+  OR: [CommentScalarWhereInput!]
+  NOT: [CommentScalarWhereInput!]
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+  updatedFields: [String!]
+  previousValues: CommentPreviousValues
+}
+
+input CommentSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CommentWhereInput
+  AND: [CommentSubscriptionWhereInput!]
+  OR: [CommentSubscriptionWhereInput!]
+  NOT: [CommentSubscriptionWhereInput!]
+}
+
+input CommentUpdateInput {
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
+  text: String
+  replies: CommentUpdateManyWithoutReply_toInput
+}
+
+input CommentUpdateManyDataInput {
+  text: String
+}
+
+input CommentUpdateManyMutationInput {
+  text: String
+}
+
+input CommentUpdateManyWithoutLinkInput {
+  create: [CommentCreateWithoutLinkInput!]
+  delete: [CommentWhereUniqueInput!]
+  connect: [CommentWhereUniqueInput!]
+  set: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithWhereUniqueWithoutLinkInput!]
+  upsert: [CommentUpsertWithWhereUniqueWithoutLinkInput!]
+  deleteMany: [CommentScalarWhereInput!]
+  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+}
+
+input CommentUpdateManyWithoutReply_toInput {
+  create: [CommentCreateWithoutReply_toInput!]
+  delete: [CommentWhereUniqueInput!]
+  connect: [CommentWhereUniqueInput!]
+  set: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithWhereUniqueWithoutReply_toInput!]
+  upsert: [CommentUpsertWithWhereUniqueWithoutReply_toInput!]
+  deleteMany: [CommentScalarWhereInput!]
+  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+}
+
+input CommentUpdateManyWithWhereNestedInput {
+  where: CommentScalarWhereInput!
+  data: CommentUpdateManyDataInput!
+}
+
+input CommentUpdateOneWithoutRepliesInput {
+  create: CommentCreateWithoutRepliesInput
+  update: CommentUpdateWithoutRepliesDataInput
+  upsert: CommentUpsertWithoutRepliesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CommentWhereUniqueInput
+}
+
+input CommentUpdateWithoutLinkDataInput {
+  user: UserUpdateOneRequiredInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
+  text: String
+  replies: CommentUpdateManyWithoutReply_toInput
+}
+
+input CommentUpdateWithoutRepliesDataInput {
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
+  text: String
+}
+
+input CommentUpdateWithoutReply_toDataInput {
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredInput
+  text: String
+  replies: CommentUpdateManyWithoutReply_toInput
+}
+
+input CommentUpdateWithWhereUniqueWithoutLinkInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutLinkDataInput!
+}
+
+input CommentUpdateWithWhereUniqueWithoutReply_toInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutReply_toDataInput!
+}
+
+input CommentUpsertWithoutRepliesInput {
+  update: CommentUpdateWithoutRepliesDataInput!
+  create: CommentCreateWithoutRepliesInput!
+}
+
+input CommentUpsertWithWhereUniqueWithoutLinkInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutLinkDataInput!
+  create: CommentCreateWithoutLinkInput!
+}
+
+input CommentUpsertWithWhereUniqueWithoutReply_toInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutReply_toDataInput!
+  create: CommentCreateWithoutReply_toInput!
+}
+
+input CommentWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  link: LinkWhereInput
+  user: UserWhereInput
+  reply_to: CommentWhereInput
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  replies_every: CommentWhereInput
+  replies_some: CommentWhereInput
+  replies_none: CommentWhereInput
+  AND: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+}
+
+input CommentWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 type Link {
@@ -28,6 +310,7 @@ type Link {
   url: String!
   postedBy: User
   votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type LinkConnection {
@@ -42,6 +325,7 @@ input LinkCreateInput {
   url: String!
   postedBy: UserCreateOneWithoutLinksInput
   votes: VoteCreateManyWithoutLinkInput
+  comments: CommentCreateManyWithoutLinkInput
 }
 
 input LinkCreateManyWithoutPostedByInput {
@@ -49,9 +333,22 @@ input LinkCreateManyWithoutPostedByInput {
   connect: [LinkWhereUniqueInput!]
 }
 
+input LinkCreateOneWithoutCommentsInput {
+  create: LinkCreateWithoutCommentsInput
+  connect: LinkWhereUniqueInput
+}
+
 input LinkCreateOneWithoutVotesInput {
   create: LinkCreateWithoutVotesInput
   connect: LinkWhereUniqueInput
+}
+
+input LinkCreateWithoutCommentsInput {
+  id: ID
+  description: String!
+  url: String!
+  postedBy: UserCreateOneWithoutLinksInput
+  votes: VoteCreateManyWithoutLinkInput
 }
 
 input LinkCreateWithoutPostedByInput {
@@ -59,6 +356,7 @@ input LinkCreateWithoutPostedByInput {
   description: String!
   url: String!
   votes: VoteCreateManyWithoutLinkInput
+  comments: CommentCreateManyWithoutLinkInput
 }
 
 input LinkCreateWithoutVotesInput {
@@ -66,6 +364,7 @@ input LinkCreateWithoutVotesInput {
   description: String!
   url: String!
   postedBy: UserCreateOneWithoutLinksInput
+  comments: CommentCreateManyWithoutLinkInput
 }
 
 type LinkEdge {
@@ -170,6 +469,7 @@ input LinkUpdateInput {
   url: String
   postedBy: UserUpdateOneWithoutLinksInput
   votes: VoteUpdateManyWithoutLinkInput
+  comments: CommentUpdateManyWithoutLinkInput
 }
 
 input LinkUpdateManyDataInput {
@@ -199,6 +499,13 @@ input LinkUpdateManyWithWhereNestedInput {
   data: LinkUpdateManyDataInput!
 }
 
+input LinkUpdateOneRequiredWithoutCommentsInput {
+  create: LinkCreateWithoutCommentsInput
+  update: LinkUpdateWithoutCommentsDataInput
+  upsert: LinkUpsertWithoutCommentsInput
+  connect: LinkWhereUniqueInput
+}
+
 input LinkUpdateOneRequiredWithoutVotesInput {
   create: LinkCreateWithoutVotesInput
   update: LinkUpdateWithoutVotesDataInput
@@ -206,21 +513,35 @@ input LinkUpdateOneRequiredWithoutVotesInput {
   connect: LinkWhereUniqueInput
 }
 
+input LinkUpdateWithoutCommentsDataInput {
+  description: String
+  url: String
+  postedBy: UserUpdateOneWithoutLinksInput
+  votes: VoteUpdateManyWithoutLinkInput
+}
+
 input LinkUpdateWithoutPostedByDataInput {
   description: String
   url: String
   votes: VoteUpdateManyWithoutLinkInput
+  comments: CommentUpdateManyWithoutLinkInput
 }
 
 input LinkUpdateWithoutVotesDataInput {
   description: String
   url: String
   postedBy: UserUpdateOneWithoutLinksInput
+  comments: CommentUpdateManyWithoutLinkInput
 }
 
 input LinkUpdateWithWhereUniqueWithoutPostedByInput {
   where: LinkWhereUniqueInput!
   data: LinkUpdateWithoutPostedByDataInput!
+}
+
+input LinkUpsertWithoutCommentsInput {
+  update: LinkUpdateWithoutCommentsDataInput!
+  create: LinkCreateWithoutCommentsInput!
 }
 
 input LinkUpsertWithoutVotesInput {
@@ -289,6 +610,9 @@ input LinkWhereInput {
   votes_every: VoteWhereInput
   votes_some: VoteWhereInput
   votes_none: VoteWhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
   AND: [LinkWhereInput!]
   OR: [LinkWhereInput!]
   NOT: [LinkWhereInput!]
@@ -301,6 +625,12 @@ input LinkWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createComment(data: CommentCreateInput!): Comment!
+  updateComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  updateManyComments(data: CommentUpdateManyMutationInput!, where: CommentWhereInput): BatchPayload!
+  upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
+  deleteComment(where: CommentWhereUniqueInput!): Comment
+  deleteManyComments(where: CommentWhereInput): BatchPayload!
   createLink(data: LinkCreateInput!): Link!
   updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
   updateManyLinks(data: LinkUpdateManyMutationInput!, where: LinkWhereInput): BatchPayload!
@@ -338,6 +668,9 @@ type PageInfo {
 }
 
 type Query {
+  comment(where: CommentWhereUniqueInput!): Comment
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
   link(where: LinkWhereUniqueInput!): Link
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
@@ -351,6 +684,7 @@ type Query {
 }
 
 type Subscription {
+  comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   vote(where: VoteSubscriptionWhereInput): VoteSubscriptionPayload
@@ -378,6 +712,11 @@ input UserCreateInput {
   password: String!
   links: LinkCreateManyWithoutPostedByInput
   votes: VoteCreateManyWithoutUserInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutLinksInput {
@@ -447,6 +786,14 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+  email: String
+  password: String
+  links: LinkUpdateManyWithoutPostedByInput
+  votes: VoteUpdateManyWithoutUserInput
+}
+
 input UserUpdateInput {
   name: String
   email: String
@@ -459,6 +806,13 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutVotesInput {
@@ -489,6 +843,11 @@ input UserUpdateWithoutVotesDataInput {
   email: String
   password: String
   links: LinkUpdateManyWithoutPostedByInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutLinksInput {

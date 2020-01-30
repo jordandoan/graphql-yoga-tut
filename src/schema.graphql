@@ -1,8 +1,12 @@
 type Query {
+  # HELLO I AM A QUERY
   info: String!
+  # Arguments
+  # filter: Hello
   feed(filter: String, skip: Int, first: Int, orderBy: LinkOrderByInput): Feed!
   link(id: ID!): Link
   me: User!
+  comments: [Comment!]!
 }
 
 type Mutation {
@@ -19,15 +23,20 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
   vote(linkId: ID!): Vote
   deleteVote(linkId: ID!): Vote
+  createComment(link: ID!, reply_to: ID, text: String!): Comment!
 }
 
 type Link {
+  
+  # AN ID OF THE LINK
   id: ID!
   description: String!
   url: String!
   postedBy: User
   votes: [Vote!]!
   count: Int!
+  comments: [Comment!]!
+  comment_count: Int!
 }
 
 type AuthPayload {
@@ -57,6 +66,16 @@ type Feed {
   links: [Link!]!
   count: Int!
 }
+
+type Comment {
+  id: ID!
+  link: Link!
+  user: User!
+  replies: [Comment]
+  reply_to: Comment
+  text: String!
+}
+
 enum LinkOrderByInput {
   description_ASC
   description_DESC
