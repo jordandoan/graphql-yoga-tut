@@ -11,7 +11,9 @@ async function count(parent, args, context) {
 }
 
 async function comments(parent, args, context) {
+  console.log('hi')
   return await context.prisma.link({ id: parent.id }).comments()
+  // return await context.prisma.link({ id: parent.id }).comments({where: {reply_to: null}})
 }
 module.exports = {
     postedBy,

@@ -38,6 +38,7 @@ async function me(parent, args, context, info) {
 async function comments(parent, args, context, info) {
   return await context.prisma.comments()
 }
+
 module.exports = {
   feed,
   link,

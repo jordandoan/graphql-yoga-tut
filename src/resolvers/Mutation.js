@@ -117,7 +117,7 @@ async function createComment(parent, args, context, info) {
       text: args.text
     })
   } else {
-    const parentLink = await context.prisma.comment({id: args.reply_to});
+    // const parentLink = await context.prisma.comment({id: args.reply_to});
     const comment = await context.prisma.createComment({
       user: { connect: { id: userId }},
       link: { connect: { id: args.link }},

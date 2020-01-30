@@ -1,0 +1,2 @@
+to do
+filter comments for post by NULL PARENTS
