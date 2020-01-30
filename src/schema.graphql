@@ -36,6 +36,7 @@ type Link {
   votes: [Vote!]!
   count: Int!
   comments: [Comment!]!
+  comment_count: Int!
 }
 
 type AuthPayload {
