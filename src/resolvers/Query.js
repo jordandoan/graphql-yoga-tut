@@ -35,8 +35,12 @@ async function me(parent, args, context, info) {
   return await context.prisma.user({id})
 }
 
+async function comments(parent, args, context, info) {
+  return await context.prisma.comments()
+}
 module.exports = {
   feed,
   link,
   me,
+  comments
 }

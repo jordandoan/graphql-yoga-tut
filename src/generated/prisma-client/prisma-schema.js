@@ -27,8 +27,9 @@ type Comment {
   id: ID!
   link: Link!
   user: User!
-  reply: Comment
+  reply_to: Comment
   text: String!
+  replies(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
 }
 
 type CommentConnection {
@@ -41,8 +42,9 @@ input CommentCreateInput {
   id: ID
   link: LinkCreateOneWithoutCommentsInput!
   user: UserCreateOneInput!
-  reply: CommentCreateOneInput
+  reply_to: CommentCreateOneWithoutRepliesInput
   text: String!
+  replies: CommentCreateManyWithoutReply_toInput
 }
 
 input CommentCreateManyWithoutLinkInput {
@@ -50,16 +52,38 @@ input CommentCreateManyWithoutLinkInput {
   connect: [CommentWhereUniqueInput!]
 }
 
-input CommentCreateOneInput {
-  create: CommentCreateInput
+input CommentCreateManyWithoutReply_toInput {
+  create: [CommentCreateWithoutReply_toInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateOneWithoutRepliesInput {
+  create: CommentCreateWithoutRepliesInput
   connect: CommentWhereUniqueInput
 }
 
 input CommentCreateWithoutLinkInput {
   id: ID
   user: UserCreateOneInput!
-  reply: CommentCreateOneInput
+  reply_to: CommentCreateOneWithoutRepliesInput
   text: String!
+  replies: CommentCreateManyWithoutReply_toInput
+}
+
+input CommentCreateWithoutRepliesInput {
+  id: ID
+  link: LinkCreateOneWithoutCommentsInput!
+  user: UserCreateOneInput!
+  reply_to: CommentCreateOneWithoutRepliesInput
+  text: String!
+}
+
+input CommentCreateWithoutReply_toInput {
+  id: ID
+  link: LinkCreateOneWithoutCommentsInput!
+  user: UserCreateOneInput!
+  text: String!
+  replies: CommentCreateManyWithoutReply_toInput
 }
 
 type CommentEdge {
@@ -131,18 +155,12 @@ input CommentSubscriptionWhereInput {
   NOT: [CommentSubscriptionWhereInput!]
 }
 
-input CommentUpdateDataInput {
-  link: LinkUpdateOneRequiredWithoutCommentsInput
-  user: UserUpdateOneRequiredInput
-  reply: CommentUpdateOneInput
-  text: String
-}
-
 input CommentUpdateInput {
   link: LinkUpdateOneRequiredWithoutCommentsInput
   user: UserUpdateOneRequiredInput
-  reply: CommentUpdateOneInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
   text: String
+  replies: CommentUpdateManyWithoutReply_toInput
 }
 
 input CommentUpdateManyDataInput {
@@ -165,15 +183,27 @@ input CommentUpdateManyWithoutLinkInput {
   updateMany: [CommentUpdateManyWithWhereNestedInput!]
 }
 
+input CommentUpdateManyWithoutReply_toInput {
+  create: [CommentCreateWithoutReply_toInput!]
+  delete: [CommentWhereUniqueInput!]
+  connect: [CommentWhereUniqueInput!]
+  set: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithWhereUniqueWithoutReply_toInput!]
+  upsert: [CommentUpsertWithWhereUniqueWithoutReply_toInput!]
+  deleteMany: [CommentScalarWhereInput!]
+  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+}
+
 input CommentUpdateManyWithWhereNestedInput {
   where: CommentScalarWhereInput!
   data: CommentUpdateManyDataInput!
 }
 
-input CommentUpdateOneInput {
-  create: CommentCreateInput
-  update: CommentUpdateDataInput
-  upsert: CommentUpsertNestedInput
+input CommentUpdateOneWithoutRepliesInput {
+  create: CommentCreateWithoutRepliesInput
+  update: CommentUpdateWithoutRepliesDataInput
+  upsert: CommentUpsertWithoutRepliesInput
   delete: Boolean
   disconnect: Boolean
   connect: CommentWhereUniqueInput
@@ -181,8 +211,23 @@ input CommentUpdateOneInput {
 
 input CommentUpdateWithoutLinkDataInput {
   user: UserUpdateOneRequiredInput
-  reply: CommentUpdateOneInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
   text: String
+  replies: CommentUpdateManyWithoutReply_toInput
+}
+
+input CommentUpdateWithoutRepliesDataInput {
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredInput
+  reply_to: CommentUpdateOneWithoutRepliesInput
+  text: String
+}
+
+input CommentUpdateWithoutReply_toDataInput {
+  link: LinkUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredInput
+  text: String
+  replies: CommentUpdateManyWithoutReply_toInput
 }
 
 input CommentUpdateWithWhereUniqueWithoutLinkInput {
@@ -190,15 +235,26 @@ input CommentUpdateWithWhereUniqueWithoutLinkInput {
   data: CommentUpdateWithoutLinkDataInput!
 }
 
-input CommentUpsertNestedInput {
-  update: CommentUpdateDataInput!
-  create: CommentCreateInput!
+input CommentUpdateWithWhereUniqueWithoutReply_toInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutReply_toDataInput!
+}
+
+input CommentUpsertWithoutRepliesInput {
+  update: CommentUpdateWithoutRepliesDataInput!
+  create: CommentCreateWithoutRepliesInput!
 }
 
 input CommentUpsertWithWhereUniqueWithoutLinkInput {
   where: CommentWhereUniqueInput!
   update: CommentUpdateWithoutLinkDataInput!
   create: CommentCreateWithoutLinkInput!
+}
+
+input CommentUpsertWithWhereUniqueWithoutReply_toInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutReply_toDataInput!
+  create: CommentCreateWithoutReply_toInput!
 }
 
 input CommentWhereInput {
@@ -218,7 +274,7 @@ input CommentWhereInput {
   id_not_ends_with: ID
   link: LinkWhereInput
   user: UserWhereInput
-  reply: CommentWhereInput
+  reply_to: CommentWhereInput
   text: String
   text_not: String
   text_in: [String!]
@@ -233,6 +289,9 @@ input CommentWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
+  replies_every: CommentWhereInput
+  replies_some: CommentWhereInput
+  replies_none: CommentWhereInput
   AND: [CommentWhereInput!]
   OR: [CommentWhereInput!]
   NOT: [CommentWhereInput!]

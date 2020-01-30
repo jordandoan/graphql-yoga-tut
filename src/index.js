@@ -8,6 +8,7 @@ const User = require('./resolvers/User')
 const Link = require('./resolvers/Link')
 const Subscription = require('./resolvers/Subscription')
 const Vote = require('./resolvers/Vote')
+const Comment = require('./resolvers/Comment')
 
 const resolvers = {
   Query,
@@ -16,6 +17,7 @@ const resolvers = {
   Link,
   Subscription,
   Vote,
+  Comment,
     // updateLink: (parent, args) => {
     //   let found = links.findIndex(link => link.id == args.id);
     //   if (found != -1) {

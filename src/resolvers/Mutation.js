@@ -110,11 +110,23 @@ async function deleteVote(parent, args, context, info) {
 
 async function createComment(parent, args, context, info) {
   const userId = getUserId(context)
-  return context.prisma.createComment({
-    user: { connect: { id: userId }},
-    link: { connect: { id: args.link }},
-    text: args.text
-  })
+  if (!args.reply_to) {
+    return context.prisma.createComment({
+      user: { connect: { id: userId }},
+      link: { connect: { id: args.link }},
+      text: args.text
+    })
+  } else {
+    const parentLink = await context.prisma.comment({id: args.reply_to});
+    const comment = await context.prisma.createComment({
+      user: { connect: { id: userId }},
+      link: { connect: { id: args.link }},
+      reply_to: { connect: { id: args.reply_to }},
+      text: args.text
+    });
+    return comment
+    // const newParent = await context.prisma.connect({})
+  }
 }
 
 module.exports = {

@@ -27,6 +27,7 @@ type Comment {
   id: ID! @id
   link: Link! @relation(name: "CommentOnVote", onDelete: SET_NULL)
   user: User!
-  reply: Comment
+  reply_to: Comment @relation(name: "CommentOnComment", onDelete: SET_NULL)
   text: String!
+  replies: [Comment!]! @relation(name: "CommentOnComment", onDelete: CASCADE)
 }

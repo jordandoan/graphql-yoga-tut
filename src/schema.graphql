@@ -67,9 +67,10 @@ type Feed {
 }
 
 type Comment {
+  id: ID!
   link: Link!
   user: User!
-  replies: [Comment!]!
+  replies: [Comment]
   reply_to: Comment
   text: String!
 }
