@@ -10,8 +10,12 @@ async function count(parent, args, context) {
   return await context.prisma.votesConnection({where: {link: {id:parent.id}}}).aggregate().count();
 }
 
+async function comments(parent, args, context) {
+  return await context.prisma.link({ id: parent.id }).comments()
+}
 module.exports = {
     postedBy,
     votes,
-    count
+    count,
+    comments
 }

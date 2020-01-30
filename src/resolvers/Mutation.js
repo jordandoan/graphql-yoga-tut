@@ -107,6 +107,16 @@ async function deleteVote(parent, args, context, info) {
     id, info
   ) 
 }
+
+async function createComment(parent, args, context, info) {
+  const userId = getUserId(context)
+  return context.prisma.createComment({
+    user: { connect: { id: userId }},
+    link: { connect: { id: args.link }},
+    text: args.text
+  })
+}
+
 module.exports = {
   signup,
   login,
@@ -115,4 +125,5 @@ module.exports = {
   deleteVote,
   updateLink,
   deleteLink,
+  createComment
 }
